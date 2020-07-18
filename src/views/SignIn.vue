@@ -13,7 +13,7 @@
                   @submit.prevent="handleFormSubmit"
                   id="sign-in-form"
                   ref="signInForm"
-                  v-model="valid"
+                  v-model="formValidation"
                   lazy-validation
                 >
                   <v-text-field
@@ -23,6 +23,7 @@
                     type="text"
                     v-model="username"
                     :rules="usernameRules"
+                    @click="handleClickCancelValidation"
                     required
                     outlined
                     dense
@@ -34,6 +35,7 @@
                     type="password"
                     v-model="password"
                     :rules="passwordRules"
+                    @click="handleClickCancelValidation"
                     required
                     outlined
                     dense
@@ -68,12 +70,10 @@ import axios from 'axios'
 import router from '../router'
 
 export default {
-  name: "SignIn",
-  components: {
-  },
+  name: 'SignIn',
   data() {
     return {
-      valid: true,
+      formValidation: true,
       usernameRules: [
         v => !!v || 'Username is required',
       ],
@@ -81,68 +81,59 @@ export default {
         v => !!v || 'Password is required',
         v => (v && v.length >= 8)   || 'Password must be longer than 8 characters'
       ],
-      username: "",
-      password: ""
+      username: '',
+      password: '',
+      submitted: false
     };
   },
-  created() {
-    // Get username, token, created date from local storage
-    let username = localStorage.getItem('username')
-    let token = localStorage.getItem('user-token')
-
-    // If items in local storage exist -> redirect to main page
-    // If not, try removing items in local storage (just in case)
-    if (username != null && token != null) {
-
-      // Validate the token with api server
-      axios.post(process.env.VUE_APP_API_URL + '/login/authtoken', {username, token})
-        .then(res => {
-          const { isValid } = res.data
-          if (isValid) {
-            // Redirect user to home page
-            router.push("/")
+  methods: {
+    setUsername(username) {
+      // Retrieve username from localStorage
+      localStorage.setItem('username', username)
+    },
+    setAuthToken(authToken) {
+      // Retrieve authToken from localStorage
+      localStorage.setItem('user-token', authToken)
+    },
+    signIn(username, password) {
+      // Try login to api server
+      return axios.post(process.env.VUE_APP_API_URL + '/login', { username, password })
+        .then(result => {
+          if (result.status == 200) {
+            return result.data;
           } else {
-            // Remove items in local storage
-            localStorage.removeItem('username');
-            localStorage.removeItem('user-token');
+            return false
           }
         })
-        .catch(e => console.log(e))
-
-    } else {
-      // Remove items in local storage
-      localStorage.removeItem('username');
-      localStorage.removeItem('user-token');
-    }
-            
-  },
-  methods: {
-    // When sign in form is submitted
-    handleFormSubmit() {
+        .catch(error => {
+          console.log(error)
+          return false
+        })
+    },
+    async handleFormSubmit() {
       // Validate entire form according to each input rules
       if(this.$refs.signInForm.validate()) {
-        // Form is validated 
-        const credential = {
-          username: this.username,
-          password: this.password
+        let loginResult = await this.signIn(this.username, this.password)
+        let { username, authToken } = loginResult
+        if (username != null && authToken != null) {
+          this.setUsername(username);
+          this.setAuthToken(authToken);
+          router.push('/')
+        } else {
+          // Login invalid
+          this.submitted = true;
+          this.usernameRules.push('Your username or password is invalid')
+          this.passwordRules.push('Your username or password is invalid')
+          this.$refs.signInForm.validate()
         }
-
-        // Try login to api server
-        axios.post(process.env.VUE_APP_API_URL + '/login', credential)
-          .then(res => {
-            // Check for status of the response
-            if (res.status == 200) {
-              const { username, authToken } = res.data
-              if (username != null && authToken != null) {
-                localStorage.setItem('username', username)
-                localStorage.setItem('user-token', authToken)
-
-                router.push("/")
-              }
-            }
-            console.log(res.data)
-          })
-          .catch(e => console.log(e))
+      }
+    },
+    handleClickCancelValidation() {
+      if (this.submitted) {
+        this.submitted = false;
+        this.usernameRules.pop()
+        this.passwordRules.pop()
+        this.$refs.signInForm.validate()
       }
     }
   }
