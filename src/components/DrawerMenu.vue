@@ -1,5 +1,11 @@
 <template>
-  <v-navigation-drawer color="primary" dark app :mini-variant="miniVariant" :expand-on-hover="miniVariant">
+  <v-navigation-drawer
+    color="primary"
+    dark
+    app
+    :mini-variant="miniVariant"
+    :expand-on-hover="miniVariant"
+    mobile-breakpoint="0">
     <v-list dense nav>
       <v-list-item two-line class="px-0">
         <v-list-item-avatar>

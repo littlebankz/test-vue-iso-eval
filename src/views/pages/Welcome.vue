@@ -1,16 +1,26 @@
 <template>
-  <v-container class="fill-height" fluid>
-    <v-row align="center" justify="center">
-      <v-col class="text-center">
-          ISO Evaluation
+  <v-container>
+    <v-row>
+      <v-col cols="12" align="left">
+        <WorksDataTable />
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
+import WorksDataTable from "../../components/WorksDataTable";
 export default {
-    name: 'Welcome'
+  name: "Welcome",
+  components: {
+    WorksDataTable
+  },
+  data() {
+    return {
+    };
+  },
+  methods: {
+  }
 };
 </script>
 

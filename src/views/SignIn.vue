@@ -23,7 +23,7 @@
                     type="text"
                     v-model="username"
                     :rules="usernameRules"
-                    @click="handleClickCancelValidation"
+                    @change="handleCancelValidation"
                     required
                     outlined
                     dense
@@ -35,7 +35,7 @@
                     type="password"
                     v-model="password"
                     :rules="passwordRules"
-                    @click="handleClickCancelValidation"
+                    @change="handleCancelValidation"
                     required
                     outlined
                     dense
@@ -128,7 +128,7 @@ export default {
         }
       }
     },
-    handleClickCancelValidation() {
+    handleCancelValidation() {
       if (this.submitted) {
         this.submitted = false;
         this.usernameRules.pop()
