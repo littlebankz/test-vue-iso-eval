@@ -1,9 +1,14 @@
 <template>
-  <v-dialog v-model="dialog" max-width="700px">
-    <template v-slot:activator="{ on, attrs }">
-      <v-btn v-bind="attrs" v-on="on" color="primary">
-        <v-icon left>mdi-plus</v-icon>เพิ่ม
-      </v-btn>
+  <v-dialog v-model="dialog" :max-width="maxWidth">
+    <template v-slot:activator="{ on: dialog }">
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on: tooltip }">
+          <v-btn v-on="{ ...tooltip, ...dialog }" color="primary">
+            <v-icon left>mdi-plus</v-icon>เพิ่ม
+          </v-btn>
+        </template>
+        <span>เพิ่มงานใหม่</span>
+      </v-tooltip>
     </template>
     <v-card>
       <v-card-title>
@@ -14,19 +19,50 @@
         </v-btn>
       </v-card-title>
       <v-card-text>
-        <v-stepper v-model="e1">
+        <v-stepper v-model="currentStep">
           <v-stepper-header>
-            <template v-for="n in steps">
-              <v-stepper-step :key="`${n}-step`" :complete="e1 > n" :step="n" editable>Step {{ n }}</v-stepper-step>
-              <v-divider v-if="n !== steps" :key="n"></v-divider>
-            </template>
+            <v-stepper-step :complete="currentStep > 1" :step="1" editable>ข้อมูลทะเบียนงาน</v-stepper-step>
+            <v-divider></v-divider>
+            <v-stepper-step :complete="currentStep > 2" :step="2" editable>พื้นที่</v-stepper-step>
+            <v-divider></v-divider>
+            <v-stepper-step :complete="currentStep > 3" :step="3" editable>กิจกรรม / พื้นที่ภายใน</v-stepper-step>
+            <v-divider></v-divider>
+            <v-stepper-step :complete="currentStep > 4" :step="4" editable>กิจกรรม / พื้นที่ภายนอก</v-stepper-step>
           </v-stepper-header>
           <v-stepper-items>
-            <v-stepper-content v-for="n in steps" :key="`${n}-content`" :step="n">
-              <AddNewWorkForms
-                :n="n"
-                v-on:next-step="nextStep"
+            <v-stepper-content step="1" class="pa-3">
+              <WorkInfoStepForm ref="workInfoStep" />
+              <StepButton
+                :step="1"
                 v-on:previous-step="previousStep"
+                v-on:next-step="nextStep"
+                v-on:add-work="save"
+              />
+            </v-stepper-content>
+            <v-stepper-content step="2" class="pa-3">
+              <AreaSelectStepForm ref="areaSelectStep" />
+              <StepButton
+                :step="2"
+                v-on:previous-step="previousStep"
+                v-on:next-step="nextStep"
+                v-on:add-work="save"
+              />
+            </v-stepper-content>
+            <v-stepper-content step="3" class="pa-3">
+              <ActivityStepForm ref="innerActStep" />
+              <StepButton
+                :step="3"
+                v-on:previous-step="previousStep"
+                v-on:next-step="nextStep"
+                v-on:add-work="save"
+              />
+            </v-stepper-content>
+            <v-stepper-content step="4" class="pa-3">
+              <ActivityStepForm ref="outerActStep" />
+              <StepButton
+                :step="4"
+                v-on:previous-step="previousStep"
+                v-on:next-step="nextStep"
                 v-on:add-work="save"
               />
             </v-stepper-content>
@@ -38,33 +74,41 @@
 </template>
 
 <script>
-import AddNewWorkForms from "./AddNewWorkForms";
+import StepButton from "./StepButton";
+import WorkInfoStepForm from "./WorkInfoStepForm";
+import AreaSelectStepForm from "./AreaSelectStepForm";
+import ActivityStepForm from "./ActivityStepForm";
 
 export default {
   name: "AddNewWorkButton",
   components: {
-    AddNewWorkForms
+    StepButton,
+    WorkInfoStepForm,
+    AreaSelectStepForm,
+    ActivityStepForm
   },
   data() {
     return {
-      e1: 1,
+      currentStep: 1,
       steps: 4,
       dialog: false
     };
   },
-  watch: {
-    steps(val) {
-      if (this.e1 > val) {
-        this.e1 = val;
-      }
+  computed: {
+    maxWidth() {
+      if (this.currentStep == 1) return '800px'
+      else if (this.currentStep == 2) return '800px'
+      else if (this.currentStep == 3) return '1100px'
+      else if (this.currentStep == 4) return '1100px'
+      else return '1100px'
     }
   },
   methods: {
-    nextStep(n) {
-      this.e1 = n + 1;
+    nextStep() {
+      this.currentStep++;
     },
-    previousStep(n) {
-      this.e1 = n - 1;
+    previousStep() {
+      this.currentStep--;
     },
     close() {
       this.dialog = false;
@@ -72,6 +116,12 @@ export default {
     save() {
       this.$emit("add-work");
       this.close();
+
+      this.$refs.workInfoStep.clearForm();
+      this.$refs.areaSelectStep.clearForm();
+      this.$refs.innerActStep.clearForm();
+      this.$refs.outerActStep.clearForm();
+      this.currentStep = 1;
     }
   }
 };

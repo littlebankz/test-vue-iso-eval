@@ -5,40 +5,47 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    newWork: {
-      workname: "",
-      company: "",
-      department: "",
-      evalType: "",
-      author: "",
-
-      innerAreaList: [],
-      outerAreaList: []
+    userInfo: {
+      username: '',
+      authToken: '',
+      role: '',
     },
+    addNewWork: {
+      workInfo: {
+        workname: "",
+        company: "",
+        department: "",
+        evalType: "",
+        author: ""
+      },
+      area: {
+        inner: [],
+        outer: []
+      },
+    }
   },
   mutations: {
-    updateWorkname(state, value) {
-      state.newWork.workname = value
+    setUserInfo(state, value) {
+      let { username, authToken, role } = value
+      state.userInfo.username = username
+      state.userInfo.authToken = authToken
+      state.userInfo.role = role
     },
-    updateCompany(state, value) {
-      state.newWork.company = value
+    clearUserInfo(state) {
+      state.userInfo.username = ''
+      state.userInfo.authToken = ''
+      state.userInfo.role = ''
     },
-    updateDepartment(state, value) {
-      state.newWork.department = value
+    updateWorkInfo(state, value) {
+      state.addNewWork.workInfo = value
     },
-    updateEvalType(state, value) {
-      state.newWork.evalType = value
+    updateArea(state, value) {
+      state.addNewWork.area = value
     },
-    updateAuthor(state, value) {
-      state.newWork.author = value
+    updateActivity() {
+
     },
 
-    updateInnerAreaList(state, value) {
-      state.newWork.innerAreaList = value
-    },
-    updateOuterAreaList(state, value) {
-      state.newWork.outerAreaList = value
-    }
   },
   actions: {
   },

@@ -2,7 +2,7 @@
   <v-card>
     <v-card-title>
       <v-col cols="5">
-          <AddNewWorkButton v-on:add-work="handleAddNewWork"/>
+        <AddNewWorkButton v-on:add-work="handleAddNewWork" />
         <v-spacer></v-spacer>
       </v-col>
       <v-col cols="3">
@@ -36,14 +36,18 @@
       :search="search"
       :items-per-page="10"
       class="elevation-1"
-    ></v-data-table>
+    >
+      <template v-slot:item.workname="{ item }">
+        <a @click="handleWorkNameClick(item.id)">{{ item.workname }}</a>
+      </template>
+    </v-data-table>
   </v-card>
 </template>
 
 <script>
-import moment from 'moment'
+import moment from "moment";
 
-import AddNewWorkButton from './AddNewWorkButton'
+import AddNewWorkButton from "./AddNewWorkButton";
 
 export default {
   name: "WorksDataTable",
@@ -57,6 +61,7 @@ export default {
       searchTxt: "",
       works: [
         {
+          id: 1,
           workname: "งาน 1",
           company_department: "บริษัท กอไก่ หน่วยงาน ก",
           evalType: "ประจำปี",
@@ -64,6 +69,7 @@ export default {
           date: "16/07/2020"
         },
         {
+          id: 2,
           workname: "งาน 2",
           company_department: "บริษัท ขอไข่ หน่วยงาน ข",
           evalType: "ประจำปี",
@@ -71,6 +77,7 @@ export default {
           date: "17/07/2020"
         },
         {
+          id: 3,
           workname: "งาน 3",
           company_department: "บริษัท คอควาย หน่วยงาน ค",
           evalType: "ประจำปี",
@@ -78,6 +85,7 @@ export default {
           date: "18/07/2020"
         },
         {
+          id: 4,
           workname: "งาน 4",
           company_department: "บริษัท งองู หน่วยงาน ง",
           evalType: "ประจำปี",
@@ -85,6 +93,7 @@ export default {
           date: "19/07/2020"
         },
         {
+          id: 5,
           workname: "งาน 1",
           company_department: "บริษัท กอไก่ หน่วยงาน ก",
           evalType: "ประจำปี",
@@ -92,6 +101,7 @@ export default {
           date: "16/07/2020"
         },
         {
+          id: 6,
           workname: "งาน 2",
           company_department: "บริษัท ขอไข่ หน่วยงาน ข",
           evalType: "ประจำปี",
@@ -99,6 +109,7 @@ export default {
           date: "17/07/2020"
         },
         {
+          id: 7,
           workname: "งาน 3",
           company_department: "บริษัท คอควาย หน่วยงาน ค",
           evalType: "ประจำปี",
@@ -106,6 +117,7 @@ export default {
           date: "18/07/2020"
         },
         {
+          id: 8,
           workname: "งาน 4",
           company_department: "บริษัท งองู หน่วยงาน ง",
           evalType: "ประจำปี",
@@ -113,6 +125,7 @@ export default {
           date: "19/07/2020"
         }
       ],
+      nextWorkId: 9,
       keys: ["ชื่องาน", "บริษัท/หน่วยงาน", "ผู้จัดทำ"]
     };
   },
@@ -159,15 +172,26 @@ export default {
       alert("Search Click");
     },
     handleAddNewWork() {
-      let nw = {
-        workname: this.$store.state.newWork.workname,
-        company_department: this.$store.state.newWork.company + ' ' + this.$store.state.newWork.department,
-        evalType: this.$store.state.newWork.evalType,
-        author: this.$store.state.newWork.author,
-        date: moment().format('DD/MM/YYYY'),
-        innerAreaList: this.$store.state.newWork.innerAreaList
-      }
-      this.works.push(nw)
+      let work = {
+        id: this.nextWorkId,
+        workname: this.$store.state.addNewWork.workInfo.workname,
+        company_department:
+          this.$store.state.addNewWork.workInfo.company +
+          " " +
+          this.$store.state.addNewWork.workInfo.department,
+        evalType: this.$store.state.addNewWork.workInfo.evalType,
+        author: this.$store.state.addNewWork.workInfo.author,
+        date: moment().format("DD/MM/YYYY"),
+        area: {
+          inner: this.$store.state.addNewWork.area.inner,
+          outerAreaList: this.$store.state.addNewWork.area.outer
+        }
+      };
+      this.nextWorkId++;
+      this.works.push(work);
+    },
+    handleWorkNameClick(id) {
+      alert(id);
     }
   }
 };

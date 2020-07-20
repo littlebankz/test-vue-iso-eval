@@ -24,7 +24,6 @@ const routes = [
   },
   {
     path: '/',
-    name: 'Page',
     component: Page,
     children: [
       {
@@ -54,6 +53,7 @@ router.beforeEach(async (to, from, next) => {
   
   if (to.name === 'SignOut') {
     authentication.destroyToken();
+    this.$store.commit('clearUserInfo')
   }
   if (to.name !== 'SignIn') {
     let username = authentication.getUsername()
