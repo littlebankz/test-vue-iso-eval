@@ -4,7 +4,8 @@ import VueRouter from 'vue-router'
 import SignIn from '../views/SignIn'
 import Page from '../views/Page'
 
-import Welcome from '../views/pages/Welcome'
+import Work from '../views/pages/Work'
+
 import Account from '../views/pages/Account'
 import About from '../views/pages/About'
 
@@ -24,12 +25,13 @@ const routes = [
   },
   {
     path: '/',
+    name: 'Home',
     component: Page,
     children: [
       {
-        path: '',
-        name: 'Welcome',
-        component: Welcome,
+        path: 'work',
+        name: 'Work',
+        component: Work,
       },
       {
         path: 'account',
@@ -62,7 +64,11 @@ router.beforeEach(async (to, from, next) => {
       authentication.destroyToken()
       next('/signin')
     } else {
-      next()
+      if (to.name === 'Home') {
+        next('/work')
+      } else {
+        next()
+      }
     }
   } else {
     next()

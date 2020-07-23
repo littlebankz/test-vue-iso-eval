@@ -31,8 +31,8 @@
           </v-stepper-header>
           <v-stepper-items>
             <v-stepper-content step="1" class="pa-3">
-              <WorkInfoStepForm ref="workInfoStep" />
-              <StepButton
+              <AddNewWorkWorkInfo ref="workInfoStep" />
+              <StepControlButton
                 :step="1"
                 v-on:previous-step="previousStep"
                 v-on:next-step="nextStep"
@@ -40,8 +40,8 @@
               />
             </v-stepper-content>
             <v-stepper-content step="2" class="pa-3">
-              <AreaSelectStepForm ref="areaSelectStep" />
-              <StepButton
+              <AddNewWorkArea ref="areaStep" />
+              <StepControlButton
                 :step="2"
                 v-on:previous-step="previousStep"
                 v-on:next-step="nextStep"
@@ -49,8 +49,8 @@
               />
             </v-stepper-content>
             <v-stepper-content step="3" class="pa-3">
-              <ActivityStepForm ref="innerActStep" />
-              <StepButton
+              <AddNewWorkActivity ref="innerActivityStep" :areaScope="'inner'" />
+              <StepControlButton
                 :step="3"
                 v-on:previous-step="previousStep"
                 v-on:next-step="nextStep"
@@ -58,8 +58,8 @@
               />
             </v-stepper-content>
             <v-stepper-content step="4" class="pa-3">
-              <ActivityStepForm ref="outerActStep" />
-              <StepButton
+              <AddNewWorkActivity ref="outerActivityStep" :areaScope="'outer'" />
+              <StepControlButton
                 :step="4"
                 v-on:previous-step="previousStep"
                 v-on:next-step="nextStep"
@@ -74,18 +74,18 @@
 </template>
 
 <script>
-import StepButton from "./StepButton";
-import WorkInfoStepForm from "./WorkInfoStepForm";
-import AreaSelectStepForm from "./AreaSelectStepForm";
-import ActivityStepForm from "./ActivityStepForm";
+import StepControlButton from "./StepControlButton";
+import AddNewWorkWorkInfo from "./AddNewWorkWorkInfo";
+import AddNewWorkArea from "./AddNewWorkArea";
+import AddNewWorkActivity from "./AddNewWorkActivity";
 
 export default {
   name: "AddNewWorkButton",
   components: {
-    StepButton,
-    WorkInfoStepForm,
-    AreaSelectStepForm,
-    ActivityStepForm
+    StepControlButton,
+    AddNewWorkWorkInfo,
+    AddNewWorkArea,
+    AddNewWorkActivity
   },
   data() {
     return {
@@ -116,11 +116,6 @@ export default {
     save() {
       this.$emit("add-work");
       this.close();
-
-      this.$refs.workInfoStep.clearForm();
-      this.$refs.areaSelectStep.clearForm();
-      this.$refs.innerActStep.clearForm();
-      this.$refs.outerActStep.clearForm();
       this.currentStep = 1;
     }
   }

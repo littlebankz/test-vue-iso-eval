@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="pa-5">
     <v-btn text @click="$emit('previous-step')" v-if="step > 1">ย้อนกลับ</v-btn>
     <v-btn color="primary" @click="$emit('next-step')" v-if="step < 4">
       ต่อไป
@@ -13,7 +13,7 @@
 
 <script>
 export default {
-  name: "StepButton",
+  name: "StepControlButton",
   props: ["step"]
 };
 </script>

@@ -1,31 +1,31 @@
 <template>
-  <v-container>
-    <v-row>
+  <v-container class="pb-0 mb-0">
+    <v-row dense>
       <v-col cols="5">
         <v-subheader>ขื่องาน</v-subheader>
       </v-col>
       <v-col cols="7">
-        <v-text-field outlined dense v-model="workInfo.workname" label="ชื่องาน"></v-text-field>
+        <v-text-field outlined dense v-model="buffer_input_work.work_name" label="ชื่องาน"></v-text-field>
       </v-col>
     </v-row>
-    <v-row>
+    <v-row dense>
       <v-col cols="5">
         <v-subheader>บริษัท/หน่วยงาน</v-subheader>
       </v-col>
       <v-col cols="4">
-        <v-select outlined dense :items="companies" v-model="workInfo.company" label="บริษัท"></v-select>
+        <v-select outlined dense :items="headers_company" v-model="buffer_input_work.work_company" label="บริษัท"></v-select>
       </v-col>
       <v-col cols="3">
         <v-select
           outlined
           dense
-          :items="departments"
-          v-model="workInfo.department"
+          :items="headers_department"
+          v-model="buffer_input_work.work_department"
           label="หน่วยงาน"
         ></v-select>
       </v-col>
     </v-row>
-    <v-row>
+    <v-row dense>
       <v-col cols="5">
         <v-subheader>ลักษณะการประเมิน</v-subheader>
       </v-col>
@@ -33,18 +33,18 @@
         <v-select
           outlined
           dense
-          :items="evalTypes"
-          v-model="workInfo.evalType"
+          :items="headers_eval_type"
+          v-model="buffer_input_work.work_eval_type"
           label="ลักษณะการประเมิน"
         ></v-select>
       </v-col>
     </v-row>
-    <v-row>
+    <v-row dense>
       <v-col cols="5">
         <v-subheader>ผู้จัดทำ</v-subheader>
       </v-col>
       <v-col cols="7">
-        <v-text-field outlined dense v-model="workInfo.author" label="ผู้จัดทำ"></v-text-field>
+        <v-text-field outlined dense v-model="buffer_input_work.work_author" label="ผู้จัดทำ"></v-text-field>
       </v-col>
     </v-row>
   </v-container>
@@ -52,21 +52,20 @@
 
 <script>
 export default {
-  name: "WorkInfoStepForm",
+  name: "AddNewWorkWorkInfo",
   props: [],
   data() {
     return {
-      workInfo: {
-        workname: "",
-        company: "",
-        department: "",
-        evalType: "",
-        author: ""
+      buffer_input_work: {
+        work_name: "",
+        work_company: "",
+        work_department: "",
+        work_eval_type: "",
+        work_author: ""
       },
-      // Select items
-      companies: ["บริษัท ก", "บริษัท ข", "บริษัท ค", "บริษัท ง"],
-      departments: ["หน่วยงาน ก", "หน่วยงาน ข", "หน่วยงาน ค", "หน่วยงาน ง"],
-      evalTypes: [
+      headers_company: ["บริษัท ก", "บริษัท ข", "บริษัท ค", "บริษัท ง"],
+      headers_department: ["หน่วยงาน ก", "หน่วยงาน ข", "หน่วยงาน ค", "หน่วยงาน ง"],
+      headers_eval_type: [
         "ประจำปี",
         "ก่อนเปลี่ยนแปลง",
         "ระหว่างเปลี่ยนแปลง",
@@ -76,20 +75,20 @@ export default {
     };
   },
   watch: {
-    workInfo: {
+    work: {
       handler(val) {
-        this.$store.commit("updateWorkInfo", val);
+        this.$store.commit("updateWorkBuffer", val);
       },
       deep: true
     }
   },
   methods: {
     clearForm() {
-      this.workInfo.workname = "";
-      this.workInfo.company = "";
-      this.workInfo.department = "";
-      this.workInfo.evalType = "";
-      this.workInfo.author = "";
+      this.buffer_input_work.work_name = "";
+      this.buffer_input_work.work_company = "";
+      this.buffer_input_work.work_department = "";
+      this.buffer_input_work.work_eval_type = "";
+      this.buffer_input_work.work_author = "";
     }
   }
 };

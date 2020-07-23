@@ -9,9 +9,9 @@
 </template>
 
 <script>
-import WorksDataTable from "../../components/WorksDataTable";
+import WorksDataTable from "../../components/work/WorksDataTable";
 export default {
-  name: "Welcome",
+  name: "Work",
   components: {
     WorksDataTable
   },
