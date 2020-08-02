@@ -12,33 +12,43 @@ import DrawerMenu from "../components/DrawerMenu";
 export default {
   name: "Page",
   components: {
-    DrawerMenu
+    DrawerMenu,
   },
-  data: function() {
+  data: function () {
     return {
       menuList: [
         {
           title: "Home",
           icon: "mdi-home",
-          to: "/"
+          to: "/",
+        },
+        {
+          title: "Company",
+          icon: "mdi-city",
+          to: "/",
         },
         {
           title: "Account",
           icon: "mdi-account-box",
-          to: "/account"
+          to: "/account",
+        },
+        {
+          title: "Risk",
+          icon: "mdi-alert",
+          to: "/",
         },
         {
           title: "About",
           icon: "mdi-information",
-          to: "/about"
-        }
-      ]
+          to: "/about",
+        },
+      ],
     };
   },
   methods: {
     toggleDrawer() {
       this.drawer = !this.drawer;
-    }
-  }
+    },
+  },
 };
 </script>

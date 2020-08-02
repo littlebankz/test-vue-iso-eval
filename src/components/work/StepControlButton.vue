@@ -14,9 +14,9 @@
 <script>
 export default {
   name: "StepControlButton",
-  props: ["step"]
+  props: ["step"],
+  methods: {},
 };
 </script>
 
-<style>
-</style>
+<style></style>
