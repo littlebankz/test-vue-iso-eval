@@ -52,8 +52,7 @@
                     class="white--text"
                     depressed
                     block
-                    >Login</v-btn
-                  >
+                  >Login</v-btn>
                 </v-col>
               </v-card-actions>
             </v-card>
@@ -65,8 +64,7 @@
 </template>
 
 <script>
-import authentication from "../plugins/authentication";
-import { mapActions } from "vuex";
+import axios from "axios";
 import router from "../router";
 
 export default {
@@ -74,27 +72,55 @@ export default {
   data() {
     return {
       formValidation: true,
-      usernameRules: [(v) => !!v || "Username is required"],
+      usernameRules: [v => !!v || "Username is required"],
       passwordRules: [
-        (v) => !!v || "Password is required",
-        (v) => (v && v.length >= 8) || "Password must be longer than 8 characters",
+        v => !!v || "Password is required",
+        v => (v && v.length >= 8) || "Password must be longer than 8 characters"
       ],
       username: "",
       password: "",
-      submitted: false,
+      submitted: false
     };
   },
   methods: {
-    ...mapActions(["setUserInfo"]),
+    setUsername(username) {
+      // Retrieve username from localStorage
+      localStorage.setItem("username", username);
+    },
+    setAuthToken(authToken) {
+      // Retrieve authToken from localStorage
+      localStorage.setItem("user-token", authToken);
+    },
+    signIn(username, password) {
+      // Try login to api server
+      return axios
+        .post(process.env.VUE_APP_API_URL + "/login", { username, password })
+        .then(result => {
+          if (result.status == 200) {
+            return result.data;
+          } else {
+            return false;
+          }
+        })
+        .catch(error => {
+          console.log(error);
+          return false;
+        });
+    },
     async handleFormSubmit() {
       // Validate entire form according to each input rules
       if (this.$refs.signInForm.validate()) {
-        const { username, authToken, role } = await authentication.signIn(
-          this.username,
-          this.password
-        );
+        let loginResult = await this.signIn(this.username, this.password);
+        let { username, authToken, role } = loginResult;
         if (username != null && authToken != null && role != null) {
-          this.setUserInfo({ username, authToken, role });
+          this.setUsername(username);
+          this.setAuthToken(authToken);
+          let payload = {
+            username,
+            authToken,
+            role,
+          }
+          this.$store.commit("setUserInfo", payload);
           router.push("/");
         } else {
           // Login invalid
@@ -112,9 +138,10 @@ export default {
         this.passwordRules.pop();
         this.$refs.signInForm.validate();
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
-<style></style>
+<style>
+</style>

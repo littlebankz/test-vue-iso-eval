@@ -5,25 +5,24 @@
     app
     :mini-variant="miniVariant"
     :expand-on-hover="miniVariant"
-    mobile-breakpoint="0"
-  >
+    mobile-breakpoint="0">
     <v-list dense nav>
       <v-list-item two-line class="px-0">
         <v-list-item-avatar>
           <v-icon>mdi-account-circle</v-icon>
         </v-list-item-avatar>
         <v-list-item-content>
-          <v-list-item-title>Name : {{ allUserInfo.username }}</v-list-item-title>
-          <v-list-item-subtitle>Role : {{ allUserInfo.role }}</v-list-item-subtitle>
+          <v-list-item-title>John Doe</v-list-item-title>
+          <v-list-item-subtitle>Safety Instructor</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
       <v-divider dark></v-divider>
       <v-list-item :key="index" v-for="(menu, index) in menuList" :to="menu.to">
         <v-list-item-action>
-          <v-icon>{{ menu.icon }}</v-icon>
+          <v-icon>{{menu.icon}}</v-icon>
         </v-list-item-action>
         <v-list-item-content>
-          <v-list-item-title>{{ menu.title }}</v-list-item-title>
+          <v-list-item-title>{{menu.title}}</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
       <v-divider dark></v-divider>
@@ -44,24 +43,21 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 export default {
   name: "DrawerMenu",
   props: ["menuList"],
-  data() {
+  data: function() {
     return {
-      miniVariant: true,
+      miniVariant: false
     };
   },
   created() {
     setTimeout(() => {
-      this.miniVariant = true;
-    }, 2500);
-  },
-  computed: {
-    ...mapGetters(["allUserInfo"]),
-  },
+      this.miniVariant = true
+    }, 2500)
+  }
 };
 </script>
 
-<style></style>
+<style>
+</style>
