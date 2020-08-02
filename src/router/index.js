@@ -1,79 +1,88 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import Vue from "vue";
+import store from "../store";
+import VueRouter from "vue-router";
 
-import SignIn from '../views/SignIn'
-import Page from '../views/Page'
+import SignIn from "../views/SignIn";
+import SignOut from "../views/SignOut";
+import Page from "../views/Page";
 
-import Work from '../views/pages/Work'
+import WorkList from "../views/pages/WorkList";
+import WorkReport from "../views/pages/WorkReport";
 
-import Account from '../views/pages/Account'
-import About from '../views/pages/About'
+import Account from "../views/pages/Account";
+import About from "../views/pages/About";
 
-import authentication from '../plugins/authentication'
+import authentication from "../plugins/authentication";
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
   {
-    path: '/signin',
-    name: 'SignIn',
+    path: "/signin",
+    name: "SignIn",
     component: SignIn,
   },
   {
-    path: '/signout',
-    name: 'SignOut',
+    path: "/signout",
+    name: "SignOut",
+    component: SignOut,
   },
   {
-    path: '/',
-    name: 'Home',
+    path: "/",
+    name: "Home",
     component: Page,
     children: [
       {
-        path: 'work',
-        name: 'Work',
-        component: Work,
+        path: "work",
+        name: "WorkList",
+        component: WorkList,
       },
       {
-        path: 'account',
-        name: 'Account',
+        path: "work/:id",
+        name: "WorkReport",
+        component: WorkReport,
+      },
+      {
+        path: "account",
+        name: "Account",
         component: Account,
       },
       {
-        path: 'about',
-        name: 'About',
+        path: "about",
+        name: "About",
         component: About,
-      }
-    ]
-  }
-]
+      },
+    ],
+  },
+];
 
 const router = new VueRouter({
-  routes
-})
+  routes,
+  mode: "history",
+});
 
 router.beforeEach(async (to, from, next) => {
-  
-  if (to.name === 'SignOut') {
-    authentication.destroyToken();
-    this.$store.commit('clearUserInfo')
-  }
-  if (to.name !== 'SignIn') {
-    let username = authentication.getUsername()
-    let authToken = authentication.getAuthToken()
-    if (await authentication.validateAuthToken(username, authToken) === false) {
-      authentication.destroyToken()
-      next('/signin')
+  if (to.name !== "SignIn") {
+    const username = authentication.getLocalStorageUsername();
+    const authToken = authentication.getLocalStorageAuthToken();
+
+    const response = await authentication.validateAuthToken(username, authToken);
+
+    if (response.isValid === false) {
+      authentication.destroyLocalStorageItems();
+      next("/signin");
     } else {
-      if (to.name === 'Home') {
-        next('/work')
+      const role = response.role;
+      store.dispatch("setUserInfo", { username, authToken, role });
+      if (to.name === "Home") {
+        next("/work");
       } else {
-        next()
+        next();
       }
     }
   } else {
-    next()
+    next();
   }
+});
 
-})
-
-export default router
+export default router;

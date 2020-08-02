@@ -13,7 +13,13 @@
         <v-subheader>บริษัท/หน่วยงาน</v-subheader>
       </v-col>
       <v-col cols="4">
-        <v-select outlined dense :items="headers_company" v-model="buffer_input_work.work_company" label="บริษัท"></v-select>
+        <v-select
+          outlined
+          dense
+          :items="headers_company"
+          v-model="buffer_input_work.work_company"
+          label="บริษัท"
+        ></v-select>
       </v-col>
       <v-col cols="3">
         <v-select
@@ -22,20 +28,6 @@
           :items="headers_department"
           v-model="buffer_input_work.work_department"
           label="หน่วยงาน"
-        ></v-select>
-      </v-col>
-    </v-row>
-    <v-row dense>
-      <v-col cols="5">
-        <v-subheader>ลักษณะการประเมิน</v-subheader>
-      </v-col>
-      <v-col cols="7">
-        <v-select
-          outlined
-          dense
-          :items="headers_eval_type"
-          v-model="buffer_input_work.work_eval_type"
-          label="ลักษณะการประเมิน"
         ></v-select>
       </v-col>
     </v-row>
@@ -51,6 +43,8 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
   name: "AddNewWorkWorkInfo",
   props: [],
@@ -60,39 +54,38 @@ export default {
         work_name: "",
         work_company: "",
         work_department: "",
-        work_eval_type: "",
-        work_author: ""
+        work_author: "",
       },
       headers_company: ["บริษัท ก", "บริษัท ข", "บริษัท ค", "บริษัท ง"],
-      headers_department: ["หน่วยงาน ก", "หน่วยงาน ข", "หน่วยงาน ค", "หน่วยงาน ง"],
-      headers_eval_type: [
-        "ประจำปี",
-        "ก่อนเปลี่ยนแปลง",
-        "ระหว่างเปลี่ยนแปลง",
-        "หลังเปลี่ยนแปลง",
-        "เกิดอุบัติการณ์/ข้อร้องเรียน"
-      ]
+      headers_department: [
+        "หน่วยงาน ก",
+        "หน่วยงาน ข",
+        "หน่วยงาน ค",
+        "หน่วยงาน ง",
+      ],
     };
   },
+  computed: {},
   watch: {
-    work: {
+    buffer_input_work: {
       handler(val) {
-        this.$store.commit("updateWorkBuffer", val);
+        this.updateWorkBuffer(val);
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   methods: {
+    ...mapActions(["updateWorkBuffer"]),
     clearForm() {
-      this.buffer_input_work.work_name = "";
-      this.buffer_input_work.work_company = "";
-      this.buffer_input_work.work_department = "";
-      this.buffer_input_work.work_eval_type = "";
-      this.buffer_input_work.work_author = "";
-    }
-  }
+      this.buffer_input_work = {
+        work_name: "",
+        work_company: "",
+        work_department: "",
+        work_author: "",
+      };
+    },
+  },
 };
 </script>
 
-<style>
-</style>
+<style></style>
