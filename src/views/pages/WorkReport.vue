@@ -2,9 +2,7 @@
   <v-container>
     <v-row>
       <v-col cols="12" align="left">
-        <v-card>
-          <v-breadcrumbs :items="items" large></v-breadcrumbs>
-        </v-card>
+        <ReportHeader currentPage="WorkReport" />
       </v-col>
     </v-row>
     <v-row>
@@ -74,7 +72,7 @@
         <v-card>
           <v-card-title class="text-h6">กิจกรรม / พื้นที่ภายใน</v-card-title>
           <div :key="a_id" v-for="a_id in inner_area_id">
-            <v-subheader>{{area_name_from_area_id(a_id)}}</v-subheader>
+            <v-subheader>{{ area_name_from_area_id(a_id) }}</v-subheader>
             <v-data-table
               :headers="headers_activity"
               :items="activity_info_from_id(a_id)"
@@ -93,7 +91,7 @@
         <v-card>
           <v-card-title>กิจกรรม / พื้นที่ภายนอก</v-card-title>
           <div :key="a_id" v-for="a_id in outer_area_id">
-            <v-subheader>{{area_name_from_area_id(a_id)}}</v-subheader>
+            <v-subheader>{{ area_name_from_area_id(a_id) }}</v-subheader>
             <v-data-table
               :headers="headers_activity"
               :items="activity_info_from_id(a_id)"
@@ -111,10 +109,13 @@
 </template>
 
 <script>
+import ReportHeader from "../../components/ReportHeader";
 import { mapGetters } from "vuex";
 export default {
   name: "WorkReport",
-  components: {},
+  components: {
+    ReportHeader,
+  },
   data() {
     return {
       buffer: {},
@@ -141,44 +142,17 @@ export default {
           value: "activity_stakesholder",
         },
       ],
-      items: [
-        {
-          text: "Work Registration",
-          disabled: false,
-          href: "",
-        },
-        {
-          text: "Work Risk Evaluation",
-          disabled: false,
-          href: "/",
-        },
-        {
-          text: "Work Instruction",
-          disabled: true,
-          href: "/",
-        },
-        {
-          text: "Work Risk Control and Improve",
-          disabled: true,
-          href: "/",
-        },
-        {
-          text: "Work Improve Plan",
-          disabled: true,
-          href: "/",
-        },
-      ],
     };
   },
   computed: {
     ...mapGetters(["workInfoFromID"]),
-    work_info: function () {
+    work_info: function() {
       return this.workInfoFromID(this.$route.params.id).work;
     },
-    area_info: function () {
+    area_info: function() {
       return this.workInfoFromID(this.$route.params.id).area;
     },
-    inner_area_id: function () {
+    inner_area_id: function() {
       return this.area_info
         .map((area) => {
           if (area.area_type == "inner") return area.area_id;
@@ -187,7 +161,7 @@ export default {
           return id != undefined;
         });
     },
-    outer_area_id: function () {
+    outer_area_id: function() {
       return this.area_info
         .map((area) => {
           if (area.area_type == "outer") return area.area_id;
@@ -196,7 +170,7 @@ export default {
           return id != undefined;
         });
     },
-    activity_info: function () {
+    activity_info: function() {
       return this.workInfoFromID(this.$route.params.id).activity;
     },
   },
@@ -215,5 +189,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

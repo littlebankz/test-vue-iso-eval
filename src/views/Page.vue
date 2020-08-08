@@ -25,7 +25,7 @@ export default {
         {
           title: "Company",
           icon: "mdi-city",
-          to: "/",
+          to: "/company",
         },
         {
           title: "Account",
@@ -35,7 +35,7 @@ export default {
         {
           title: "Risk",
           icon: "mdi-alert",
-          to: "/",
+          to: "/risk",
         },
         {
           title: "About",

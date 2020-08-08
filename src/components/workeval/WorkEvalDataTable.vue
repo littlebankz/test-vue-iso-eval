@@ -2,7 +2,7 @@
   <v-card>
     <v-card-title>
       <v-col cols="5">
-        <AddNewWorkDialog v-on:add-work="handleAddNewWork" ref="addNewWorkDialog" />
+        <AddNewWorkEvalDialog v-on:add-work="handleAddNewWorkEval" ref="addNewWorkEvalDialog" />
         <v-spacer></v-spacer>
       </v-col>
       <v-col cols="3">
@@ -32,27 +32,26 @@
     </v-card-title>
     <v-data-table
       :headers="headers"
-      :items="works"
+      :items="work_evals"
       :search="data_table_search"
       :items-per-page="10"
       class="elevation-1"
     >
-      <template v-slot:item.work_name="{ item }">
-        <a @click="handleWorkNameClick(item.work_id)">{{ item.work_name }}</a>
+      <template v-slot:item.work_eval_name="{ item }">
+        <a @click="handleWorkEvalClick(item.work_eval_id)">{{ item.work_eval_name }}</a>
       </template>
     </v-data-table>
   </v-card>
 </template>
 
 <script>
-import AddNewWorkDialog from "./AddNewWorkDialog";
-import { mapGetters, mapActions } from "vuex";
-import router from "../../router";
+import AddNewWorkEvalDialog from "./AddNewWorkEvalDialog";
+import { mapGetters } from "vuex";
 
 export default {
-  name: "WorksDataTable",
+  name: "WorkEvalDataTable",
   components: {
-    AddNewWorkDialog,
+    AddNewWorkEvalDialog,
   },
   data() {
     return {
@@ -60,82 +59,62 @@ export default {
       search_box_search_by: "",
       search_box_search_text: "",
       temp_dialog: false,
-      keys: ["ชื่องาน", "บริษัท", "หน่วยงาน", "ผู้จัดทำ"],
+      keys: ["ชื่อรายงาน", "บริษัท", "หน่วยงาน", "ผู้จัดทำ"],
     };
   },
   created() {},
   computed: {
     ...mapGetters({
-      works: "allWorkInfo",
+      work_evals: "allWorkEvalInfo",
     }),
     headers() {
       return [
         {
-          text: "ชื่องาน",
-          value: "work_name",
+          text: "ชื่อรายงาน",
+          value: "work_eval_name",
           filter: (value) => {
-            if (
-              this.search_box_search_by != "ชื่องาน" ||
-              this.search_box_search_text == null
-            )
-              return true;
+            if (this.search_box_search_by != "ชื่อรายงาน" || this.search_box_search_text == null) return true;
             return value.toString().indexOf(this.search_box_search_text) !== -1;
           },
         },
         {
           text: "บริษัท",
-          value: "work_company",
+          value: "work_eval_company",
           filter: (value) => {
-            if (
-              this.search_box_search_by != "บริษัท" ||
-              this.search_box_search_text == null
-            )
-              return true;
+            if (this.search_box_search_by != "บริษัท" || this.search_box_search_text == null) return true;
             return value.toString().indexOf(this.search_box_search_text) !== -1;
           },
         },
         {
           text: "หน่วยงาน",
-          value: "work_department",
+          value: "work_eval_department",
           filter: (value) => {
-            if (
-              this.search_box_search_by != "หน่วยงาน" ||
-              this.search_box_search_text == null
-            )
-              return true;
+            if (this.search_box_search_by != "หน่วยงาน" || this.search_box_search_text == null) return true;
             return value.toString().indexOf(this.search_box_search_text) !== -1;
           },
         },
         {
           text: "ผู้จัดทำ",
-          value: "work_author",
+          value: "work_eval_author",
           filter: (value) => {
-            if (
-              this.search_box_search_by != "ผู้จัดทำ" ||
-              this.search_box_search_text == null
-            )
-              return true;
+            if (this.search_box_search_by != "ผู้จัดทำ" || this.search_box_search_text == null) return true;
             return value.toString().indexOf(this.search_box_search_text) !== -1;
           },
         },
         {
           text: "วันที่จัดทำ",
-          value: "work_date",
+          value: "work_eval_date",
         },
       ];
     },
   },
   methods: {
-    ...mapActions(["pushBufferToState", "clearBuffer"]),
     handleSearchClick() {
       alert("Search Click");
     },
-    handleAddNewWork() {
-      this.pushBufferToState();
-      this.$refs.addNewWorkDialog.closeDialog_clear();
-    },
-    handleWorkNameClick(id) {
-      router.push("/work/" + id);
+    handleAddNewWorkEval() {},
+    handleWorkEvalClick(id) {
+      alert("Report id " + id + " clicked");
     },
   },
 };

@@ -3,9 +3,7 @@
     <template v-slot:activator="{ on: add_dialog }">
       <v-tooltip bottom>
         <template v-slot:activator="{ on: tooltip }">
-          <v-btn v-on="{ ...tooltip, ...add_dialog }" color="primary">
-            <v-icon left>mdi-plus</v-icon>เพิ่ม
-          </v-btn>
+          <v-btn v-on="{ ...tooltip, ...add_dialog }" color="primary"> <v-icon left>mdi-plus</v-icon>เพิ่ม </v-btn>
         </template>
         <span>เพิ่มงานใหม่</span>
       </v-tooltip>
@@ -50,7 +48,8 @@
             <v-stepper-content step="1" class="pa-3">
               <AddNewWorkWorkInfo ref="workInfoStep" />
               <StepControlButton
-                :step="1"
+                :currentStep="1"
+                :maxStep="steps"
                 v-on:previous-step="previousStep"
                 v-on:next-step="nextStep"
                 v-on:add-work="addDialog_save"
@@ -59,7 +58,8 @@
             <v-stepper-content step="2" class="pa-3">
               <AddNewWorkArea ref="areaStep" />
               <StepControlButton
-                :step="2"
+                :currentStep="2"
+                :maxStep="steps"
                 v-on:previous-step="previousStep"
                 v-on:next-step="nextStep"
                 v-on:add-work="addDialog_save"
@@ -68,7 +68,8 @@
             <v-stepper-content step="3" class="pa-3">
               <AddNewWorkActivity ref="innerActivityStep" :areaScope="'inner'" />
               <StepControlButton
-                :step="3"
+                :currentStep="3"
+                :maxStep="steps"
                 v-on:previous-step="previousStep"
                 v-on:next-step="nextStep"
                 v-on:add-work="addDialog_save"
@@ -77,7 +78,8 @@
             <v-stepper-content step="4" class="pa-3">
               <AddNewWorkActivity ref="outerActivityStep" :areaScope="'outer'" />
               <StepControlButton
-                :step="4"
+                :currentStep="4"
+                :maxStep="steps"
                 v-on:previous-step="previousStep"
                 v-on:next-step="nextStep"
                 v-on:add-work="addDialog_save"
@@ -91,7 +93,7 @@
 </template>
 
 <script>
-import StepControlButton from "./StepControlButton";
+import StepControlButton from "../StepControlButton";
 import AddNewWorkWorkInfo from "./AddNewWorkWorkInfo";
 import AddNewWorkArea from "./AddNewWorkArea";
 import AddNewWorkActivity from "./AddNewWorkActivity";

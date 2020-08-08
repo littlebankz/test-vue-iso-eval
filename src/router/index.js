@@ -1,5 +1,5 @@
 import Vue from "vue";
-import store from "../store";
+// import store from "../store";
 import VueRouter from "vue-router";
 
 import SignIn from "../views/SignIn";
@@ -8,11 +8,12 @@ import Page from "../views/Page";
 
 import WorkList from "../views/pages/WorkList";
 import WorkReport from "../views/pages/WorkReport";
+import WorkEvalList from "../views/pages/WorkEvalList";
 
 import Account from "../views/pages/Account";
 import About from "../views/pages/About";
 
-import authentication from "../plugins/authentication";
+// import authentication from "../plugins/authentication";
 
 Vue.use(VueRouter);
 
@@ -43,6 +44,11 @@ const routes = [
         component: WorkReport,
       },
       {
+        path: "workeval/:id",
+        name: "WorkEvalList",
+        component: WorkEvalList,
+      },
+      {
         path: "account",
         name: "Account",
         component: Account,
@@ -62,27 +68,39 @@ const router = new VueRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-  if (to.name !== "SignIn") {
-    const username = authentication.getLocalStorageUsername();
-    const authToken = authentication.getLocalStorageAuthToken();
 
-    const response = await authentication.validateAuthToken(username, authToken);
-
-    if (response.isValid === false) {
-      authentication.destroyLocalStorageItems();
-      next("/signin");
-    } else {
-      const role = response.role;
-      store.dispatch("setUserInfo", { username, authToken, role });
-      if (to.name === "Home") {
-        next("/work");
-      } else {
-        next();
-      }
-    }
+  if (to.name === "Home") {
+    next("/work")
   } else {
     next();
   }
+
+  /* REMOVE COMMENT ON PRODUCTION */
+
+  // if (to.name !== "SignIn") {
+  //   const username = authentication.getLocalStorageUsername();
+  //   const authToken = authentication.getLocalStorageAuthToken();
+
+  //   const response = await authentication.validateAuthToken(username, authToken);
+
+  //   if (response.isValid === false) {
+  //     authentication.destroyLocalStorageItems();
+  //     next("/signin");
+  //   } else {
+  //     const role = response.role;
+  //     store.dispatch("setUserInfo", { username, authToken, role });
+  //     if (to.name === "Home") {
+  //       next("/work");
+  //     } else {
+  //       next();
+  //     }
+  //   }
+  // } else {
+  //   next();
+  // }
+
+  /*                              */
 });
+
 
 export default router;

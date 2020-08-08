@@ -207,7 +207,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["areaList", "activityInArea", "nextActivityID"]),
+    ...mapGetters(["areaList", "activityInArea"]),
   },
   methods: {
     ...mapActions(["updateActivityBuffer", "increaseNextActivityID"]),

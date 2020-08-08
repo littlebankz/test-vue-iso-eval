@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import authentication from "../plugins/authentication";
+// import authentication from "../plugins/authentication";
 import { mapActions } from "vuex";
 import router from "../router";
 
@@ -89,10 +89,22 @@ export default {
     async handleFormSubmit() {
       // Validate entire form according to each input rules
       if (this.$refs.signInForm.validate()) {
-        const { username, authToken, role } = await authentication.signIn(
-          this.username,
-          this.password
-        );
+
+        /* REMOVE COMMENT ON PRODUCTION */
+
+        // const { username, authToken, role } = await authentication.signIn(
+        //   this.username,
+        //   this.password
+        // );
+
+        /*                              */
+
+        /* REMOVE ON PRODUCTION */
+        const username = 'administrator'
+        const authToken = 'donotcheck'
+        const role = 'admin'
+        /*                      */
+
         if (username != null && authToken != null && role != null) {
           this.setUserInfo({ username, authToken, role });
           router.push("/");
