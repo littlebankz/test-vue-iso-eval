@@ -14,6 +14,9 @@
       <v-card-title>
         <span class="headline">เพิ่มทะเบียนความเสี่ยง</span>
         <v-spacer></v-spacer>
+        <v-btn @click="handleSaveButtonClick" icon>
+          <v-icon>mdi-content-save</v-icon>
+        </v-btn>
         <v-dialog v-model="close_dialog" :max-width="700">
           <template v-slot:activator="{ on, attrs }">
             <v-btn v-on="on" v-bind="attrs" @click="clear = false" icon>
@@ -326,6 +329,9 @@ export default {
     },
     closeDialog_cancel() {
       this.close_dialog = false;
+    },
+    handleSaveButtonClick() {
+      alert("Save Button Click");
     },
   },
 };
