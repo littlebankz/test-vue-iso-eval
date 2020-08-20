@@ -245,7 +245,12 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["riskInAreaAndActivity", "riskInArea", "getAreaList", "getActivityList"]),
+    ...mapGetters([
+      "riskInAreaAndActivity",
+      "riskInArea",
+      "getAreaList",
+      "getActivityList",
+    ]),
     headers_area_list() {
       return this.getAreaList(this.$route.params.id);
     },
@@ -272,7 +277,9 @@ export default {
       if (this.selected_area_id) {
         if (this.activitySlot == "enable" && !this.selected_activity_id) {
           // Tell them to select the area first
-          alert("Please specify the activity that you want to add this new risk to.");
+          alert(
+            "Please specify the activity that you want to add this new risk to."
+          );
         } else {
           // Push user input into render view
           this.buffer_evaluate.push({ ...this.buffer_input_evaluate });
@@ -307,7 +314,9 @@ export default {
     // When user press - icon in v-data-table
     handleDeleteClick(id) {
       // Remove selected id from the array
-      this.buffer_evaluate = this.buffer_evaluate.filter((evaluate) => evaluate.eval_id != id);
+      this.buffer_evaluate = this.buffer_evaluate.filter(
+        (evaluate) => evaluate.eval_id != id
+      );
     },
 
     clearForm() {},

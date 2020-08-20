@@ -52,7 +52,9 @@
       <template v-slot:item.risk_environment="{ item }">
         <v-dialog width="700">
           <template v-slot:activator="{ on, attrs }">
-            <v-btn text v-bind="attrs" v-on="on"> <v-icon left>mdi-magnify</v-icon>ดู </v-btn>
+            <v-btn text v-bind="attrs" v-on="on">
+              <v-icon left>mdi-magnify</v-icon>ดู
+            </v-btn>
           </template>
           <EnvironmentFormShow :item="item" />
         </v-dialog>
@@ -60,7 +62,9 @@
       <template v-slot:item.risk_security="{ item }">
         <v-dialog width="700">
           <template v-slot:activator="{ on, attrs }">
-            <v-btn text v-bind="attrs" v-on="on"> <v-icon left>mdi-magnify</v-icon>ดู </v-btn>
+            <v-btn text v-bind="attrs" v-on="on">
+              <v-icon left>mdi-magnify</v-icon>ดู
+            </v-btn>
           </template>
           <SecurityFormShow :item="item" />
         </v-dialog>
@@ -388,7 +392,14 @@ export default {
         "ประเด็น 5",
         "ประเด็น 6",
       ],
-      headers_add_risk_source: ["ที่มา 1", "ที่มา 2", "ที่มา 3", "ที่มา 4", "ที่มา 5", "ที่มา 6"],
+      headers_add_risk_source: [
+        "ที่มา 1",
+        "ที่มา 2",
+        "ที่มา 3",
+        "ที่มา 4",
+        "ที่มา 5",
+        "ที่มา 6",
+      ],
     };
   },
   watch: {
@@ -419,7 +430,12 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["riskInAreaAndActivity", "riskInArea", "getAreaList", "getActivityList"]),
+    ...mapGetters([
+      "riskInAreaAndActivity",
+      "riskInArea",
+      "getAreaList",
+      "getActivityList",
+    ]),
     headers_area_list() {
       return this.getAreaList(this.$route.params.id);
     },
@@ -446,7 +462,9 @@ export default {
       if (this.selected_area_id) {
         if (this.activitySlot == "enable" && !this.selected_activity_id) {
           // Tell them to select the area first
-          alert("Please specify the activity that you want to add this new risk to.");
+          alert(
+            "Please specify the activity that you want to add this new risk to."
+          );
         } else {
           // Push user input into render view
           this.buffer_risk.push({ ...this.buffer_input_risk });
